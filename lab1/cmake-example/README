@@ -1,0 +1,35 @@
+This is an example project that is built with cmake.
+The project consists of
+- an example library, TestLib, which is built from testlib/foo.h and .cc 
+- a configuration file, SimpleConfig.h which is built from SimpleConfig.h.in
+- a main program, in main.cc
+
+With cmake, you usually build the project in a directory separate from the source,
+typically named build. This has the advantages that you can easily make several
+separate builds simply by doing them in separate build directories. It also
+means that the generated files are kept separate from the source code, so that
+removing them is done by simply removing the entire build directory.
+
+The steps to create the build files (Makefile, unless otherwise specified, but
+cmake can generate project files for other build systems as well) and then
+build the project are
+
+> mkdir build
+> cd build
+> cmake ..
+> make
+
+To see the actual commands executed when building with the generated Makefile,
+use the command
+> make VERBOSE=1 
+
+Configuration of the compilation can be done by setting environment variables
+which are read by cmake.
+
+To set which compiler to use:
+
+CC=clang CXX=clang++ cmake ..
+
+To set compiler flags, one can use
+
+cmake -DCMAKE_CXX_FLAGS="-Wall -Werror" ..
