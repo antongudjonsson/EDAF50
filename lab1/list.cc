@@ -9,6 +9,14 @@ List::List() {
 }
 
 List::~List() {
+	Node* prev = first;
+	Node* curr = first->next;
+	while(curr != nullptr){
+		delete prev;
+		prev = curr;
+		curr = curr->next;
+	}
+	delete prev;
 }
 
 bool List::exists(int d) const {
