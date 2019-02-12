@@ -1,4 +1,0 @@
-hello 3 ell hel llo 
-world 3 ell hel llo orl rld wor 
-is 0 
-two 0 

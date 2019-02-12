@@ -29,10 +29,6 @@ all: $(PROGS)
 test: 
 
 # Targets rely on implicit rules for compiling and linking
-#dictionary: dictionary.o word.o spell.o
-#spell: dictionary.o
-#word: word.o
-#compileDict:
 compileDict: compileDict.o
 spell: dictionary.o spell.o word.o
 

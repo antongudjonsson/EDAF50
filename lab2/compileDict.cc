@@ -13,6 +13,8 @@ int main(){
     std::string line;
     std::string temp = "";
     int count = 0;
+    int x = 7 / 2;
+    cout << std::to_string(x) << endl;
 
     ifstream inFile (filename);
     ofstream outFile;
