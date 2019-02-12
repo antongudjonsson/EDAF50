@@ -15,12 +15,24 @@ using namespace std;
 
 Dictionary::Dictionary() {
 	myDictionary = new unordered_set<string>;
-	ifstream inFile ("words");
-	string myWord;
+	ifstream inFile ("words.txt");
+	string myWord, aTrigram;
+	int nbrTrigrams;
+	vector<string>	trigrams;
+	
 	while(getline(inFile, myWord)){
-		myWord.erase(std::remove_if(myWord.begin(), myWord.end(),  [](char c){ return std::isspace(static_cast<unsigned char>(c));}), myWord.end());
-		transform(myWord.begin(), myWord.end(), myWord.begin(), ::tolower);
+		
+		inFile >> myWord;
 		myDictionary->insert(myWord);
+		
+		inFile >> nbrTrigrams;
+		
+		for(int i = 0; i < nbrTrigrams; ++i){
+			inFile >> aTrigram;
+			trigrams.push_back(aTrigram);
+		}
+		words[myWord.length() - 1].push_back(Word(myWord, trigrams));
+		trigrams.clear();
 	}
 }
 

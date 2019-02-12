@@ -18,20 +18,6 @@ int main(){
     ofstream outFile;
     outFile.open(filename + ".txt");
 
-    /*while(!inFile.eof()){
-        inFile >> line;
-        inFile.ignore();
-        if(line.length() > 3){
-            for(int i = 0; (unsigned) i < line.length() - 2; ++i){
-                temp.append(line.substr(i,3));
-                temp.append(" ");
-                count++;
-            }
-        }
-        outFile << line + " " + std::to_string(count) + " " + temp << endl;
-        temp = "";
-        count = 0;
-    }*/
     vector<string> trig;
     while(!inFile.eof()){
         inFile >> line;
@@ -39,7 +25,7 @@ int main(){
         transform(line.begin(), line.end(), line.begin(), ::tolower);
 
         if(line.length() > 3){
-            for(int i = 0; i < line.length() - 2; ++i){
+            for(int i = 0; (unsigned) i < line.length() - 2; ++i){
                 trig.push_back(line.substr(i,3));
                 count++;
             }
