@@ -1,5 +1,9 @@
 #include <ctime>  // time and localtime
 #include "date.h"
+#include <ostream>
+
+using namespace std;
+using std::ostream;
 
 int Date::daysPerMonth[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
@@ -26,5 +30,13 @@ int Date::getDay() const {
 }
 
 void Date::next() {
+}
+
+ostream& operator<<(ostream& stream, const Date& date){
+	return stream;
+}
+
+ostream& operator>>(ostream& stream, Date& date){
+	return stream;
 }
 

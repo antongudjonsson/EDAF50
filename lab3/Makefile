@@ -26,7 +26,7 @@ PROGS = tagremover primes
 
 all: $(PROGS)
 
-test: date_test tagremover_test primes_test
+test: date_test tagremover_test primes_test tostring_test
 
 # Targets rely on implicit rules for compiling and linking
 #date: date.o
@@ -35,6 +35,7 @@ tagremover_test: tagremover.o
 tagremover: tagremover.o
 primes: primes.o
 primes_test: primes.o
+tostring_test: date.o
 
 # Phony targets
 .PHONY: all test clean distclean
