@@ -22,7 +22,10 @@ template<class T>
 T string_cast(const string& myString) {
     istringstream is(myString);
     T t;
-    is >> t; 
+    is >> t;
+    if(is.fail()) {
+        throw std::invalid_argument("Error");
+    }
     return t;
 }
 
