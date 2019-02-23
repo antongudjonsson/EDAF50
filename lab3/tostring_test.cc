@@ -7,17 +7,23 @@
 
 using std::endl;
 using std::cout;
+using std::istringstream;
 using std::ostringstream;
 using namespace std;
 
 template<typename T>
 std::string toString(const T& myObject) {
-    return "";
-    }
+    ostringstream os;
+    os << myObject;
+    return os.str();
+}
 
 template<class T>
 T string_cast(const string& myString) {
-    return 0;
+    istringstream is(myString);
+    T t;
+    is >> t; 
+    return t;
 }
 
 void tostringTest(){
@@ -38,7 +44,7 @@ void tostringTest(){
 }
 
 void stringcastTest(){
-    int i;
+    int i = 0;
     double d;
     Date date;
     Date key(2015, 01, 10);
@@ -58,11 +64,10 @@ void stringcastTest(){
         cout << "stringcast: Failed!" << endl;
         cout << "Expected: " << "12.34" << endl;
         cout << "Actual:   " << toString(d) << endl;   
-    }else if(date.getYear() == key.getYear() && date.getMonth() == key.getMonth() && date.getDay() == key.getDay()){
+    }else if(date.getYear() != key.getYear() || date.getMonth() != key.getMonth() || date.getDay() != key.getDay()){
         cout << "stringcast: Failed!" << endl;
         cout << "Expected: " << "2015-01-10" << endl;
-        cout << "Actual:   " << to_string(date.getYear()) << "-" << to_string(date.getMonth()) << "-" << to_string(date.getDay()) << endl;
-        //cout << "Actual:   " << toString(date) << endl;
+        cout << "Actual:   " << toString(date) << endl;
     }else{
         cout << "stringcast: Success!" << endl;
     }

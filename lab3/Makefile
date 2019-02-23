@@ -26,12 +26,12 @@ PROGS = tagremover primes
 
 all: $(PROGS)
 
-test: date_test tagremover_test primes_test tostring_test
+test: date_test tagremover_Test primes_test tostring_test
 
 # Targets rely on implicit rules for compiling and linking
 #date: date.o
 date_test: date.o
-tagremover_test: tagremover.o
+tagremover_Test: tagremover.o
 tagremover: tagremover.o
 primes: primes.o
 primes_test: primes.o

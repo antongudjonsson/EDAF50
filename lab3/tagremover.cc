@@ -59,8 +59,7 @@ void TagRemover::print(ostream& out){
 
 }
 
-/*
-int main(){
+
+/*int main(){
     TagRemover tr(cin);
-}
-*/
+}*/
