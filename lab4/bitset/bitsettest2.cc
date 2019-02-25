@@ -35,7 +35,6 @@ int main() {
 	}
 	copy(bs.begin(), bs.end(), ostream_iterator<bool>(cout));
 	cout << endl;
-	
 	// Count the number of set bits, print
 	cout << "Number of set bits: " << count(bs.begin(), bs.end(), true) << endl;
 }

@@ -11,22 +11,22 @@
 #include <limits>  /* numeric_limits */
 
 class BitReference;
-// class BitsetIterator;
+class BitsetIterator;
 
 class Bitset {
 	friend class BitReference;
-	// friend class BitsetIterator;
+	friend class BitsetIterator;
 public:
 	Bitset();
 	std::size_t size() const;
 	bool operator[](std::size_t pos) const;
 	BitReference operator[](std::size_t pos);
 	
-	/*
+	
 	using iterator = BitsetIterator;
 	iterator begin();
 	iterator end();
-	 */
+	
 private:
 	using BitStorage = unsigned long;
 	BitStorage bits;

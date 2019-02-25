@@ -1,6 +1,6 @@
 #include "bitset.h"
 #include "bitreference.h"
-// #include "bitsetiterator.h"
+#include "bitsetiterator.h"
 
 Bitset::Bitset() : bits(0) {}
 
@@ -16,12 +16,11 @@ BitReference Bitset::operator[](size_t pos) {
 	return BitReference(&bits, pos);
 }
 
-/*
+
 Bitset::iterator Bitset::begin() {
-	...
+	return BitsetIterator(&bits, 0);
 }
 
 Bitset::iterator Bitset::end() {
-	...
+	return BitsetIterator(&bits, size());
 }
-*/
