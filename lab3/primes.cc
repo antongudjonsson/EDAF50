@@ -4,8 +4,9 @@
 #include "primes.h"
 
 using namespace std;
-using std::cout;
+//using std::cout;
 using std::endl;
+
 
 PrimeFinder::PrimeFinder(int p){
     psize = p + 1;
@@ -19,9 +20,7 @@ PrimeFinder::PrimeFinder(int p){
         sieve[0] = sieve[1] = 'C';
     }
 }
-/*           1         2         3    5         
-"CCPPCPCPCCCPCPCCCPCPCCCPCCCCCPCPCCCC"
-  "PPCPCPCCCPCPCCCPCPCCCPCCCCCPCPCCCC"*/
+
 
 void PrimeFinder::findPrimes(){
     for(int i = 0; i < sieve.size(); ++i){
@@ -63,17 +62,6 @@ string PrimeFinder::getPrimes(){
     out.erase(out.size() - 2, 2);
     return out;
 }
-
-
-
-/*int main(){
-    PrimeFinder all(200);
-    all.findPrimes();
-    all.printAll();
-    PrimeFinder largest(10000);
-    largest.findPrimes();
-    largest.printLargest();
-}*/
 
 
 

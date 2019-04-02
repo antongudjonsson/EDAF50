@@ -13,8 +13,6 @@ int main(){
     std::string line;
     std::string temp = "";
     int count = 0;
-    int x = 7 / 2;
-    cout << std::to_string(x) << endl;
 
     ifstream inFile (filename);
     ofstream outFile;
@@ -26,7 +24,7 @@ int main(){
         inFile.ignore();
         transform(line.begin(), line.end(), line.begin(), ::tolower);
 
-        if(line.length() > 3){
+        if(line.length() > 2){
             for(int i = 0; (unsigned) i < line.length() - 2; ++i){
                 trig.push_back(line.substr(i,3));
                 count++;

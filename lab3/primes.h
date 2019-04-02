@@ -6,6 +6,7 @@ class PrimeFinder{
     public:
     PrimeFinder(int p);
 
+    /*Finds all primes in the space 0-p*/
     void findPrimes();
     
     /*Prints all primes in the space 0-p*/
@@ -17,6 +18,7 @@ class PrimeFinder{
     /*Returns a string with all numbers classified as Prime or non-prime*/
     std::string getClassified();
 
+    /*Returns a string with all primes as numbers*/
     std::string getPrimes();
 
     private:

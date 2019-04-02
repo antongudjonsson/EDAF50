@@ -39,10 +39,13 @@ Dictionary::Dictionary() {
 }
 
 bool Dictionary::contains(const string& word) const {
-	for(auto itr = myDictionary->begin(); itr != myDictionary->end(); ++itr){
+	/*for(auto itr = myDictionary->begin(); itr != myDictionary->end(); ++itr){
 		if(*itr == word){
 			return true;
 		}
+	}*/
+	if(myDictionary->count(word)){
+		return true;
 	}
 	return false;
 }
@@ -58,9 +61,11 @@ vector<string> Dictionary::get_suggestions(const string& word) const {
 void Dictionary::add_trigram_suggestions(std::vector<std::string>& suggestions, const std::string& myWord) const{
 	int nbrTrigrams = myWord.length() - 2;
 	vector<string> trigrams;
-	for(int i = 0; (unsigned) i < nbrTrigrams; ++i){
-        trigrams.push_back(myWord.substr(i,3));
-    }
+	if(nbrTrigrams > 0){
+		for(int i = 0; (unsigned) i < nbrTrigrams; ++i){
+        	trigrams.push_back(myWord.substr(i,3));
+    	}
+	}
 	sort(trigrams.begin(), trigrams.end());
 	
 	int minLength;

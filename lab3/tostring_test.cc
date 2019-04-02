@@ -52,7 +52,7 @@ void stringcastTest(){
     Date date;
     Date key(2015, 01, 10);
     try {
-        i = string_cast<int>("123");
+        i = string_cast<int>("123vrgtfd");
         d = string_cast<double>("12.34");
         date = string_cast<Date>("2015-01-10");
     } catch (std::invalid_argument& e) {

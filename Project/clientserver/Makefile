@@ -15,37 +15,37 @@ CXXFLAGS =  -O2 -Wall -Wextra -pedantic-errors -Wold-style-cast
 CXXFLAGS += -std=c++11 
 CXXFLAGS += -g
 CXXFLAGS += $(DEPFLAGS)
-LDFLAGS =   -L.
-#LDLIBS = -llab1
+LDFLAGS =   -g 
 #CPPFLAGS += -stdlib=libc++
 #CXXFLAGS += -stdlib=libc++
 #LDFLAGS +=  -stdlib=libc++
 
 # Targets
-PROGS =  spell compileDict
 
-all: $(PROGS)
+all: libclientserver.a
+	make -C test
 
-test: 
+# Create the library; ranlib is for Darwin (OS X) and maybe other systems.
+# Doesn't seem to do any damage on other systems.
 
-# Targets rely on implicit rules for compiling and linking
-compileDict: compileDict.o
-spell: dictionary.o spell.o word.o
+libclientserver.a: connection.o server.o
+	ar rv libclientserver.a  connection.o server.o
+	ranlib libclientserver.a
 
 # Phony targets
-.PHONY: all test clean distclean
+.PHONY: all clean distclean
+
+SRC = $(wildcard *.cc)
 
 # Standard clean
 clean:
-	rm -f *.o $(PROGS) *.enc *.dec
+	rm $(SRC:.cc=.o) $(PROGS)
 
 distclean: clean
-	rm *.d
-
-run: all
-	./compileDict && ./spell
+	-rm libclientserver.a
+	-rm $(SRC:.cc=.d) 
+	make -C test distclean
 
 
 # Include the *.d files
-SRC = $(wildcard *.cc)
 -include $(SRC:.cc=.d)

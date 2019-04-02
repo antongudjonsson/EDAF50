@@ -19,7 +19,7 @@ bool VNS::remove(const HostName& host){
     if(it == dns.end()){
         return false;
     }else{
-        int index = distance(dns.begin(), it);
+        //int index = distance(dns.begin(), it);
         dns.erase(it);
         return true;
     }

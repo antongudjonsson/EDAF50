@@ -10,42 +10,44 @@ DEPFLAGS = -MT $@ -MMD -MP -MF $*.d
 # Define preprocessor, compiler, and linker flags. Uncomment the # lines
 # if you use clang++ and wish to use libc++ instead of GNU's libstdc++.
 # -g is for debugging.
-CPPFLAGS =  -std=c++11 -I.
-CXXFLAGS =  -O2 -Wall -Wextra -pedantic-errors -Wold-style-cast 
-CXXFLAGS += -std=c++11 
+CPPFLAGS  = -std=c++11 -I..
+CXXFLAGS =  -O2 -Wall -Wextra -pedantic-errors -Wold-style-cast
+CXXFLAGS += -std=c++11
 CXXFLAGS += -g
 CXXFLAGS += $(DEPFLAGS)
-LDFLAGS =   -L.
-#LDLIBS = -llab1
+LDFLAGS   = -g -L..
 #CPPFLAGS += -stdlib=libc++
 #CXXFLAGS += -stdlib=libc++
 #LDFLAGS +=  -stdlib=libc++
 
+# Libraries
+LDLIBS = -lclientserver
+
 # Targets
-PROGS =  spell compileDict
+PROGS = myserver myclient
 
 all: $(PROGS)
 
-test: 
-
 # Targets rely on implicit rules for compiling and linking
-compileDict: compileDict.o
-spell: dictionary.o spell.o word.o
+# The dependency on libclientserver.a is not defined.
+myserver: myserver.o
+myclient: myclient.o
+
+SRC = $(wildcard *.cc)
 
 # Phony targets
-.PHONY: all test clean distclean
+.PHONY: all clean distclean
 
 # Standard clean
 clean:
-	rm -f *.o $(PROGS) *.enc *.dec
+	rm -f $(SRC:.cc=.o) $(PROGS)
+
 
 distclean: clean
-	rm *.d
+	-rm $(SRC:.cc=.d)
+	-rm -r $(addsuffix .dSym,$(PROGS)) # for cleaning on Macs
 
-run: all
-	./compileDict && ./spell
 
 
 # Include the *.d files
-SRC = $(wildcard *.cc)
 -include $(SRC:.cc=.d)
