@@ -41,6 +41,9 @@
 #include <sys/uio.h>    /* read(), write() */
 #include <unistd.h>     /* close(), read(), write() */
 
+using std::cout;
+using std::endl;
+
 bool Connection::ignoresPipeSignals = false;
 
 Connection::Connection()

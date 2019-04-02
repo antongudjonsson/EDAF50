@@ -45,7 +45,7 @@ clean:
 
 distclean: clean
 	-rm $(SRC:.cc=.d)
-	-rm -r $(addsuffix .dSym,$(PROGS)) # for cleaning on Macs
+	#-rm -r $(addsuffix .dSym,$(PROGS)) # for cleaning on Macs
 
 
 
