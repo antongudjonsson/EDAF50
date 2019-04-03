@@ -9,7 +9,14 @@ class Article{
     public:
     Article(string title, string author, string text);
 
-    string read();
+    string getText();
+
+    string getTitle();
+
+    string getAuthor();
+
+    int getID();
+
 
     private:
     string title;

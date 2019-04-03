@@ -5,7 +5,11 @@
 #include "messagehandler.h"
 
 #include "dBinterface.h"
+#include "memorydB.h"
+#include "newsgroup.h"
+#include "article.h"
 #include <iostream>
+#include <vector>
 using namespace std;
 
 Server init(int argc, char *argv[])
@@ -38,57 +42,133 @@ Server init(int argc, char *argv[])
         return server;
 }
 
-void list_NG(MessageHandler &msg)
+void list_NG(MessageHandler &msg, DBInterface &db)
 {
         msg.send_code(Protocol::ANS_LIST_NG);
 
+        vector<Newsgroup> ngList = db.list_NG();
+        msg.send_int_parameter(ngList.size());
+
+        for(Newsgroup ng : ngList){
+                msg.send_int_parameter(ng.getID());
+                msg.send_string_parameter(ng.getGroupName());
+        }
 
         msg.send_code(Protocol::ANS_END);
 }
 
-void create_NG(MessageHandler &msg)
+void create_NG(MessageHandler &msg, DBInterface &db)
 {
         msg.send_code(Protocol::ANS_CREATE_NG);
 
+        if(db.create_NG(msg.receive_string_parameter())){
+                msg.send_code(Protocol::ANS_ACK);
+        }else{
+                msg.send_code(Protocol::ANS_NAK);
+                msg.send_code(Protocol::ERR_NG_ALREADY_EXISTS);
+        }
 
         msg.send_code(Protocol::ANS_END);
 }
 
-void delete_NG(MessageHandler &msg)
+void delete_NG(MessageHandler &msg, DBInterface &db)
 {
         msg.send_code(Protocol::ANS_DELETE_NG);
 
+        if(db.delete_NG(msg.receive_int_parameter())){
+                msg.send_code(Protocol::ANS_ACK);
+        }else{
+                msg.send_code(Protocol::ANS_NAK);
+                msg.send_code(Protocol::ERR_NG_DOES_NOT_EXIST);
+        }
 
         msg.send_code(Protocol::ANS_END);
 }
 
-void list_articles(MessageHandler &msg)
+void list_articles(MessageHandler &msg, DBInterface &db)
 {
         msg.send_code(Protocol::ANS_LIST_ART);
 
+        vector<Article> artList = db.list_articles(msg.receive_int_parameter());
+
+        if(false){
+                msg.send_code(Protocol::ANS_NAK);
+                msg.send_code(Protocol::ERR_NG_DOES_NOT_EXIST);
+        }else{
+                msg.send_code(Protocol::ANS_ACK);
+                msg.send_int_parameter(artList.size());
+                for(Article a : artList){
+                        msg.send_int_parameter(a.getID());
+                        msg.send_string_parameter(a.getTitle());
+                }
+        }
 
         msg.send_code(Protocol::ANS_END);
 }
 
-void create_article(MessageHandler &msg)
+void create_article(MessageHandler &msg, DBInterface &db)
 {
         msg.send_code(Protocol::ANS_CREATE_ART);
 
+        if(db.create_article(msg.receive_int_parameter(), msg.receive_string_parameter(), msg.receive_string_parameter(), msg.receive_string_parameter())){
+                msg.send_code(Protocol::ANS_ACK);
+        }else{
+                msg.send_code(Protocol::ANS_NAK);
+                msg.send_code(Protocol::ERR_NG_DOES_NOT_EXIST);
+        }
 
         msg.send_code(Protocol::ANS_END);
 }
 
-void delete_article(MessageHandler &msg)
+void delete_article(MessageHandler &msg, DBInterface &db)
 {
         msg.send_code(Protocol::ANS_DELETE_ART);
 
+        int outcome = db.delete_article(msg.receive_int_parameter(), msg.receive_int_parameter());
+
+        if(outcome == SUCCESS){
+                msg.send_code(Protocol::ANS_ACK);
+        }
+        
+        
+        if(outcome == ARTICLE_NOT_FOUND){
+                msg.send_code(Protocol::ANS_NAK);
+                msg.send_code(Protocol::ERR_ART_DOES_NOT_EXIST);
+        }
+        else if(outcome == NEWSGROUP_NOT_FOUND){
+                msg.send_code(Protocol::ANS_NAK);
+                msg.send_code(Protocol::ERR_NG_DOES_NOT_EXIST);
+        }
 
         msg.send_code(Protocol::ANS_END);
 }
 
-void get_article(MessageHandler &msg)
+void get_article(MessageHandler &msg, DBInterface &db)
 {
         msg.send_code(Protocol::ANS_GET_ART);
+
+        pair<int,Article> anArticle = db.get_article(msg.receive_int_parameter(), msg.receive_int_parameter());
+        int outcome = anArticle.first;
+        string author = anArticle.second.getAuthor();
+        string text = anArticle.second.getText();
+        string title = anArticle.second.getTitle();
+
+        if(outcome == SUCCESS){
+                msg.send_code(Protocol::ANS_ACK);
+                msg.send_string_parameter(title);
+                msg.send_string_parameter(author);
+                msg.send_string_parameter(text);
+        }
+
+        if(outcome == ARTICLE_NOT_FOUND){
+                msg.send_code(Protocol::ANS_NAK);
+                msg.send_code(Protocol::ERR_ART_DOES_NOT_EXIST);        
+        }
+        else if(outcome == NEWSGROUP_NOT_FOUND){
+                msg.send_code(Protocol::ANS_NAK);
+                msg.send_code(Protocol::ERR_NG_DOES_NOT_EXIST);
+        }
+
 
 
         msg.send_code(Protocol::ANS_END);
@@ -102,6 +182,7 @@ int main(int argc, char *argv[])
                 auto conn = server.waitForActivity();
                 if (conn != nullptr)
                 {
+                        MemorydB db;
                         MessageHandler msg(conn);
                         try
                         {
@@ -109,33 +190,34 @@ int main(int argc, char *argv[])
                                 switch (cmd)
                                 {
                                 case Protocol::COM_LIST_NG:
-                                        list_NG(msg);
+                                        list_NG(msg, db);
                                         break;
                                 case Protocol::COM_CREATE_NG:
-                                        create_NG(msg);
+                                        create_NG(msg, db);
                                         break;
                                 case Protocol::COM_DELETE_NG:
-                                        delete_NG(msg);
+                                        delete_NG(msg, db);
                                         break;
                                 case Protocol::COM_LIST_ART:
-                                        list_articles(msg);
+                                        list_articles(msg, db);
                                         break;
                                 case Protocol::COM_CREATE_ART:
-                                        create_article(msg);
+                                        create_article(msg, db);
                                         break;
                                 case Protocol::COM_DELETE_ART:
-                                        delete_article(msg);
+                                        delete_article(msg, db);
                                         break;
                                 case Protocol::COM_GET_ART:
-                                        get_article(msg);
-                                        break;
-                                case Protocol::COM_END:
-                                        throw ConnectionClosedException();
+                                        get_article(msg, db);
                                         break;
                                 default:
                                         cout << "Unknown command received. Terminating connection." << endl;
-                                        server.deregisterConnection(conn);
+                                        throw ConnectionClosedException();
                                         break;
+                                }
+                                if(msg.receive_cmd() != Protocol::COM_END){
+                                        cout << "Expected end of communication. Terminating connection." << endl;
+                                        throw ConnectionClosedException();
                                 }
                         }
                         catch (ConnectionClosedException &)

@@ -33,7 +33,7 @@ all: libclientserver.a $(PROGS)
 libclientserver.a: connection.o server.o messagehandler.o
 	ar rv libclientserver.a  connection.o server.o messagehandler.o
 	ranlib libclientserver.a
-newsserver: newsserver.o connection.o server.o messagehandler.o memorydB.o newsgroup.o article.o
+newsserver: newsserver.o connection.o server.o messagehandler.o article.o newsgroup.o memorydB.o  
 
 
 # Phony targets

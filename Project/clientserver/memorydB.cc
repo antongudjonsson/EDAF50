@@ -10,8 +10,12 @@ MemorydB::~MemorydB(){
     
 }
 
-void MemorydB::list_NG() const{
-
+vector<Newsgroup> MemorydB::list_NG() const{
+    vector<Newsgroup> ngList;
+    for (auto i = data.begin(); i != data.end(); i++){
+        ngList.push_back(i->second);
+    }
+    return ngList;
 }
 
 bool MemorydB::create_NG(string groupname){
@@ -22,18 +26,18 @@ bool MemorydB::delete_NG(int grpid){
     return 0;
 }
 
-void MemorydB::list_articles(int grpid) const {
+vector<Article> MemorydB::list_articles(int grpid) const {
 
 }
 
-void MemorydB::read_article(string groupname, int articleID) const {
+pair<int,Article> MemorydB::get_article(int grpid, int articleID) const {
 
 }
 
-bool MemorydB::create_article(int grpid, string title, string author, string text){
+int MemorydB::create_article(int grpid, string title, string author, string text){
     return 0;
 }
 
-bool MemorydB::delete_article(int grpid, int articleID){
+int MemorydB::delete_article(int grpid, int articleID){
     return 0;
 }

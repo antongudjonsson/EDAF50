@@ -10,3 +10,11 @@ Article Newsgroup::getArticle(int artid){
 void Newsgroup::listArticles(){
 
 }
+
+string Newsgroup::getGroupName(){
+    return "aName";
+}
+
+int Newsgroup::getID(){
+    
+}

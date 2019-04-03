@@ -14,6 +14,10 @@ class Newsgroup {
     
     void listArticles();
 
+    string getGroupName();
+
+    int getID();
+
     private:
     string name;
     int id;
