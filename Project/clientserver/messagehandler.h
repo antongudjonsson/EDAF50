@@ -20,5 +20,5 @@ class MessageHandler {
 private:
 	std::shared_ptr<Connection> conn; // the connection
 	unsigned char receive_byte();
-  	void send_byte(int code);
+  	void send_byte(const char code);
 };
