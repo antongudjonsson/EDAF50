@@ -42,18 +42,19 @@ Server init(int argc, char *argv[])
         return server;
 }
 
-void list_NG(MessageHandler &msg, DBInterface &db)
+void list_NG(MessageHandler &msg, MemorydB &db)
 {
         msg.send_code(Protocol::ANS_LIST_NG);
 
         vector<Newsgroup> ngList = db.list_NG();
         msg.send_int_parameter(ngList.size());
 
-        for(Newsgroup ng : ngList){
-                msg.send_int_parameter(ng.getID());
-                msg.send_string_parameter(ng.getGroupName());
+        if(ngList.size() != 0){
+                for(Newsgroup ng : ngList){
+                        msg.send_int_parameter(ng.getID());
+                        msg.send_string_parameter(ng.getGroupName());
+                }
         }
-
         msg.send_code(Protocol::ANS_END);
 }
 
@@ -89,18 +90,18 @@ void list_articles(MessageHandler &msg, DBInterface &db)
 {
         msg.send_code(Protocol::ANS_LIST_ART);
 
-        vector<Article> artList = db.list_articles(msg.receive_int_parameter());
+        pair<int, vector<Article>> artList = db.list_articles(msg.receive_int_parameter());
 
-        if(false){
-                msg.send_code(Protocol::ANS_NAK);
-                msg.send_code(Protocol::ERR_NG_DOES_NOT_EXIST);
-        }else{
+        if(artList.first == 1){
                 msg.send_code(Protocol::ANS_ACK);
-                msg.send_int_parameter(artList.size());
-                for(Article a : artList){
+                msg.send_int_parameter(artList.second.size());
+                for(Article a : artList.second){
                         msg.send_int_parameter(a.getID());
                         msg.send_string_parameter(a.getTitle());
                 }
+        }else{
+                msg.send_code(Protocol::ANS_NAK);
+                msg.send_code(Protocol::ERR_NG_DOES_NOT_EXIST);
         }
 
         msg.send_code(Protocol::ANS_END);
@@ -109,8 +110,12 @@ void list_articles(MessageHandler &msg, DBInterface &db)
 void create_article(MessageHandler &msg, DBInterface &db)
 {
         msg.send_code(Protocol::ANS_CREATE_ART);
+        int ngID = msg.receive_int_parameter();
+        string title = msg.receive_string_parameter();
+        string author = msg.receive_string_parameter();
+        string text = msg.receive_string_parameter();
 
-        if(db.create_article(msg.receive_int_parameter(), msg.receive_string_parameter(), msg.receive_string_parameter(), msg.receive_string_parameter())){
+        if(db.create_article(ngID, title, author, text)){
                 msg.send_code(Protocol::ANS_ACK);
         }else{
                 msg.send_code(Protocol::ANS_NAK);
@@ -129,8 +134,6 @@ void delete_article(MessageHandler &msg, DBInterface &db)
         if(outcome == SUCCESS){
                 msg.send_code(Protocol::ANS_ACK);
         }
-        
-        
         if(outcome == ARTICLE_NOT_FOUND){
                 msg.send_code(Protocol::ANS_NAK);
                 msg.send_code(Protocol::ERR_ART_DOES_NOT_EXIST);
@@ -177,12 +180,12 @@ void get_article(MessageHandler &msg, DBInterface &db)
 int main(int argc, char *argv[])
 {
         auto server = init(argc, argv);
+        MemorydB db;
         while (true)
         {
                 auto conn = server.waitForActivity();
                 if (conn != nullptr)
                 {
-                        MemorydB db;
                         MessageHandler msg(conn);
                         try
                         {

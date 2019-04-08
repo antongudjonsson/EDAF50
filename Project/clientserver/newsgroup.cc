@@ -1,20 +1,39 @@
 #include "newsgroup.h"
 #include "article.h"
+#include "dBinterface.h"
+#include <vector>
+#include <utility>
+#include <iostream>
+using namespace std;
 
-Newsgroup::Newsgroup(string name): name(name){}
+Newsgroup::Newsgroup(string name, int id): name(name), id(id){}
 
-Article Newsgroup::getArticle(int artid){
-
+pair<int, Article> Newsgroup::getArticle(int artid) const{
+    Article art;
+    return data.count(artID) == 1 ? make_pair(SUCCESS, data.at(artid)) : make_pair(ARTICLE_NOT_FOUND, art);
 }
 
-void Newsgroup::listArticles(){
-
+vector<Article> Newsgroup::listArticles() const{
+    vector<Article> artList;
+    for(auto i : data){
+        artList.push_back(i.second);
+    }
+    return artList;
 }
 
-string Newsgroup::getGroupName(){
-    return "aName";
+bool Newsgroup::createArticle(string title, string author, string text){
+    Article art(title, author, text, artID);
+    data.emplace(artID, art);
 }
 
-int Newsgroup::getID(){
-    
+bool Newsgroup::deleteArticle(int artid){
+    return data.erase(artid) == 1 ? true : false;
+}
+
+string Newsgroup::getGroupName() const{
+    return name;
+}
+
+int Newsgroup::getID() const{
+    return id;
 }

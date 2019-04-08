@@ -3,25 +3,34 @@
 
 #include <string>
 #include "article.h"
+#include <map>
+#include <vector>
 
 using namespace std;
 
 class Newsgroup {
     public:
-    Newsgroup(string name);
+    Newsgroup(string name, int id);
 
-    Article getArticle(int id);
+    pair<int, Article> getArticle(int id) const;
     
-    void listArticles();
+    vector<Article> listArticles() const;
 
-    string getGroupName();
+    bool createArticle(string title, string author, string text);
 
-    int getID();
+    bool deleteArticle(int artid);
+
+    string getGroupName() const;
+
+    int getID() const;
+
 
     private:
     string name;
     int id;
-    //Article datastructure
+    int artID = 0;
+
+    map<int,Article> data;
 };
 
 #endif

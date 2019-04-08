@@ -28,13 +28,13 @@ class DBInterface {
         virtual bool delete_NG(int grpid) = 0;
 
         /*Lists all articles in the given News Group*/
-        virtual vector<Article> list_articles(int grpid) const = 0;
+        virtual pair<int, vector<Article>> list_articles(int grpid) const = 0;
 
         /*Prints the text of the article in News Group groupname with ID articleID*/
         virtual pair<int, Article> get_article(int grpid, int articleID) const = 0;
 
         /*Creates an article with name title and gives it an ID unique to that News Group*/
-        virtual int create_article(int grpid, string title, string author, string text) = 0;
+        virtual bool create_article(int grpid, string title, string author, string text) = 0;
 
         /*Deletes the article in News Group groupname with ID articleID*/
         virtual int delete_article(int grpid, int articleID) = 0;

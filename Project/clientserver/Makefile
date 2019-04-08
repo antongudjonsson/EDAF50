@@ -50,6 +50,9 @@ distclean: clean
 	-rm $(SRC:.cc=.d) 
 	make -C test distclean
 
+runserver: newsserver
+	./newsserver 5000
+
 
 # Include the *.d files
 -include $(SRC:.cc=.d)

@@ -2,7 +2,7 @@
 
 #include <string>
 
-Article::Article(string t, string a, string txt): title(t), author(a), text(txt){}
+Article::Article(string t, string a, string txt, int id): title(t), author(a), text(txt), id(id){}
 
 string Article::getText(){
     return text;

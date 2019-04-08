@@ -1,8 +1,12 @@
 #include "messagehandler.h"
 #include "connection.h"
 #include <vector>
+#include <iostream>
 
 using std::shared_ptr;
+using namespace std;
+using std::cout;
+using std::endl;
 
 MessageHandler::MessageHandler(shared_ptr<Connection>& c): conn(c) {}
 
@@ -24,13 +28,15 @@ void MessageHandler::send_int(int value){
 }
 
 void MessageHandler::send_int_parameter(int param){
-    conn->write(static_cast<const char>(Protocol::PAR_NUM));
+    //conn->write(static_cast<const char>(Protocol::PAR_NUM));
+    send_code(Protocol::PAR_NUM);
     send_int(param);
 }
 
 void MessageHandler::send_string_parameter(std::string param){
-    conn->write(static_cast<const char>(Protocol::PAR_STRING));
-    send_int(param.length());
+    //conn->write(static_cast<const char>(Protocol::PAR_STRING));
+    send_code(Protocol::PAR_STRING);
+    send_int(static_cast<int>(param.length()));
     for(const char c : param){
         send_byte(c);
     }
@@ -63,7 +69,7 @@ std::string MessageHandler::receive_string_parameter(){
     int len = receive_int();
     std::string str;
     for(int i = 0; i < len; i++){
-        str[i] = conn->read();
+        str.push_back(conn->read());
     }
     return str;
 }

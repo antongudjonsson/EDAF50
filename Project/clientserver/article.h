@@ -7,7 +7,7 @@ using namespace std;
 
 class Article{
     public:
-    Article(string title, string author, string text);
+    Article(string title = "", string author = "", string text = "", int id = -1);
 
     string getText();
 
