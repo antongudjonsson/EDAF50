@@ -128,8 +128,10 @@ void create_article(MessageHandler &msg, DBInterface &db)
 void delete_article(MessageHandler &msg, DBInterface &db)
 {
         msg.send_code(Protocol::ANS_DELETE_ART);
+        int grpid = msg.receive_int_parameter();
+        int artid = msg.receive_int_parameter();
 
-        int outcome = db.delete_article(msg.receive_int_parameter(), msg.receive_int_parameter());
+        int outcome = db.delete_article(grpid, artid);
 
         if(outcome == SUCCESS){
                 msg.send_code(Protocol::ANS_ACK);
@@ -149,8 +151,9 @@ void delete_article(MessageHandler &msg, DBInterface &db)
 void get_article(MessageHandler &msg, DBInterface &db)
 {
         msg.send_code(Protocol::ANS_GET_ART);
-
-        pair<int,Article> anArticle = db.get_article(msg.receive_int_parameter(), msg.receive_int_parameter());
+        int grpid = msg.receive_int_parameter();
+        int artid = msg.receive_int_parameter();
+        pair<int,Article> anArticle = db.get_article(grpid, artid);
         int outcome = anArticle.first;
         string author = anArticle.second.getAuthor();
         string text = anArticle.second.getText();
