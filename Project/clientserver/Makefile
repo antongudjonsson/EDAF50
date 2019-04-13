@@ -11,11 +11,11 @@ DEPFLAGS = -MT $@ -MMD -MP -MF $*.d
 # if you use clang++ and wish to use libc++ instead of GNU's libstdc++.
 # -g is for debugging.
 CPPFLAGS =  -std=c++11 -I.
-CXXFLAGS =  -O0 -Wall -Wextra -pedantic-errors -Wold-style-cast 
+CXXFLAGS =  -O2 -Wall -Wextra -pedantic-errors -Wold-style-cast 
 CXXFLAGS += -std=c++11 
 CXXFLAGS += -g
 CXXFLAGS += $(DEPFLAGS)
-LDFLAGS =   -g 
+LDFLAGS =   -g
 #CPPFLAGS += -stdlib=libc++
 #CXXFLAGS += -stdlib=libc++
 #LDFLAGS +=  -stdlib=libc++
@@ -33,7 +33,7 @@ all: libclientserver.a $(PROGS)
 libclientserver.a: connection.o server.o messagehandler.o
 	ar rv libclientserver.a  connection.o server.o messagehandler.o
 	ranlib libclientserver.a
-newsserver: newsserver.o connection.o server.o messagehandler.o article.o newsgroup.o memorydB.o 
+newsserver: newsserver.o connection.o server.o messagehandler.o article.o newsgroup.o memorydB.o database.o
 newsclient: newsclient.o connection.o server.o messagehandler.o
 
 
@@ -53,6 +53,12 @@ distclean: clean
 
 runserver: newsserver newsclient
 	./newsserver 3000
+
+runclient: newsserver newsclient
+	./newsclient localhost 3000
+
+reset:
+	rm -r database.db
 
 
 # Include the *.d files

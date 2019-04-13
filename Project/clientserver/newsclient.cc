@@ -175,7 +175,6 @@ void create_art(MessageHandler &msg)
     msg.send_int_parameter(grpid);
     cout << "Please provide the following information: " << endl;
     cout << "Title: ";
-    cin.ignore();
     getline(cin, title);
     msg.send_string_parameter(title);
     cout << "Author: ";

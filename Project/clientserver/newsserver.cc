@@ -6,6 +6,7 @@
 
 #include "dBinterface.h"
 #include "memorydB.h"
+#include "database.h"
 #include "newsgroup.h"
 #include "article.h"
 #include <iostream>
@@ -42,7 +43,7 @@ Server init(int argc, char *argv[])
         return server;
 }
 
-void list_NG(MessageHandler &msg, MemorydB &db)
+void list_NG(MessageHandler &msg, DBInterface &db)
 {
         msg.send_code(Protocol::ANS_LIST_NG);
 
@@ -92,7 +93,7 @@ void list_articles(MessageHandler &msg, DBInterface &db)
 
         pair<int, vector<Article>> artList = db.list_articles(msg.receive_int_parameter());
 
-        if(artList.first == 1){
+        if(artList.first == SUCCESS){
                 msg.send_code(Protocol::ANS_ACK);
                 msg.send_int_parameter(artList.second.size());
                 for(Article a : artList.second){
@@ -183,7 +184,7 @@ void get_article(MessageHandler &msg, DBInterface &db)
 int main(int argc, char *argv[])
 {
         auto server = init(argc, argv);
-        MemorydB db;
+        Database db;
         while (true)
         {
                 auto conn = server.waitForActivity();

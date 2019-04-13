@@ -44,7 +44,7 @@ bool MemorydB::delete_NG(int grpid){
 pair<int,vector<Article>> MemorydB::list_articles(int grpid) const {
     pair<int, vector<Article>> p;
     try{
-        p = make_pair(1, data.at(grpid).listArticles());
+        p = make_pair(SUCCESS, data.at(grpid).listArticles());
         return p;
     }catch(const out_of_range &oor){
         return p;
