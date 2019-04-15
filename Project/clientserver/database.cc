@@ -21,12 +21,15 @@ Database::Database(){
         string ignore;
         while(inFile >> ngid, inFile >> artid, getline(inFile, ignore)){
             artID.emplace(stoi(ngid), stoi(artid));
+            ngID = stoi(ngid);
         }
-        ngID = stoi(ngid) + 1;
+        ngID += 1;
     }
 }
 
 Database::~Database() {}
+
+bool wayToSort(Article a, Article b) { return a.getID() < b.getID(); }
 
 string replace_line(regex lineToReplace, string replacement){
     ifstream inFile("database.db/ngList.txt");
@@ -59,7 +62,7 @@ bool Database::create_NG(string groupname){
     ifstream inFile("database.db/ngList.txt");
     string line;
     string ignore;
-    while(inFile >> ignore, getline(inFile, line)){
+    while(inFile >> ignore, inFile >> ignore, getline(inFile, line)){
         line = line.substr(1);
         if(line == groupname){
             return false;
@@ -113,6 +116,7 @@ pair<int, vector<Article>> Database::list_articles(int grpid) const{
             list.push_back(art);
         }
     }
+    sort(list.begin(), list.end(), wayToSort);
     closedir(dir);
     return make_pair(SUCCESS, list);
 }
@@ -131,10 +135,11 @@ pair<int, Article> Database::get_article(int grpid, int articleID) const{
         getline(inFile, title);
         getline(inFile, author);
         while(getline(inFile, line)){
-            text.append(line);
-            text.append("\n");
+                text.append(line);
+            if(!inFile.eof()){
+                text.append("\n");
+            }
         }
-        text.erase(text.size() - 1);
         Article art(title, author, text, articleID);
         return make_pair(SUCCESS, art);
     }else{
@@ -161,5 +166,15 @@ bool Database::create_article(int grpid, string title, string author, string tex
 }
 
 int Database::delete_article(int grpid, int articleID){
-    system(("rm -r database.db/" + to_string(grpid) + "/" + to_string(articleID)).c_str());
+    DIR* dir = opendir(("database.db/" + to_string(grpid)).c_str());
+    if(!dir){
+        return NEWSGROUP_NOT_FOUND;
+    }
+    ifstream inFile("database.db/" + to_string(grpid) + "/" + to_string(articleID));
+    if(inFile.is_open()){
+        system(("rm -r database.db/" + to_string(grpid) + "/" + to_string(articleID)).c_str());
+        return SUCCESS;
+    }else{
+        return ARTICLE_NOT_FOUND;
+    }
 }
