@@ -22,10 +22,9 @@ LDFLAGS =   -g
 
 # Targets
 
-PROGS = newsserver newsclient
+PROGS = newsserver newsserverMem newsclient
 
 all: libclientserver.a $(PROGS) 
-	make -C test
 
 # Create the library; ranlib is for Darwin (OS X) and maybe other systems.
 # Doesn't seem to do any damage on other systems.
@@ -34,6 +33,7 @@ libclientserver.a: connection.o server.o messagehandler.o
 	ar rv libclientserver.a  connection.o server.o messagehandler.o
 	ranlib libclientserver.a
 newsserver: newsserver.o connection.o server.o messagehandler.o article.o newsgroup.o memorydB.o database.o
+newsserverMem: newsserverMem.o connection.o server.o messagehandler.o article.o newsgroup.o memorydB.o database.o
 newsclient: newsclient.o connection.o server.o messagehandler.o
 
 
@@ -49,7 +49,6 @@ clean:
 distclean: clean
 	-rm libclientserver.a
 	-rm $(SRC:.cc=.d) 
-	make -C test distclean
 
 runserver: newsserver newsclient
 	./newsserver 3000
@@ -59,6 +58,9 @@ runclient: newsserver newsclient
 
 reset:
 	rm -r database.db
+
+install:
+	cp newsserver newsclient newsserverMem ../bin
 
 
 # Include the *.d files

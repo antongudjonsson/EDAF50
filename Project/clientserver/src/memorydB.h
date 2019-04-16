@@ -39,7 +39,7 @@ class MemorydB : public DBInterface {
         int delete_article(int grpid, int articleID);
 
     private:
-        int ngID = 0;
+        int ngID = 1;
         map<int, Newsgroup> data;
 };
 

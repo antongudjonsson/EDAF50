@@ -1,3 +1,5 @@
+#pragma GCC diagnostic ignored "-Wunused-result"
+
 #include "database.h"
 #include <iostream>
 #include <fstream>
@@ -45,6 +47,7 @@ string replace_line(regex lineToReplace, string replacement){
     outFile << replacedFile;
     inFile.close();
     outFile.close();
+    return replacedFile;
 }   
 
 vector<Newsgroup> Database::list_NG() const{

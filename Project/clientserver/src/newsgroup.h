@@ -28,7 +28,7 @@ class Newsgroup {
     private:
     string name;
     int id;
-    int artID = 0;
+    int artID = 1;
 
     map<int,Article> data;
 };
