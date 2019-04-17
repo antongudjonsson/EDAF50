@@ -1,7 +1,7 @@
-#C++ Project - EDAF50 2019
+# C++ Project - EDAF50 2019
 In this project a sustem for distributing news has been developed.
 
-##Installation
+## Installation
 Navigate to the /src/ directory and execute the following:
 ```
 make all
