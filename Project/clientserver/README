@@ -1,11 +1,39 @@
-CPP 2005 Project, Communication Classes
----------------------------------------
+#C++ Project - EDAF50 2019
+In this project a sustem for distributing news has been developed.
 
-- This directory contains the communication classes Connection and Server,
-  and the auxiliary classes ConnectionClosedException and Protocol. These
-  classes are defined in the project description, sections 5.2 and 6.
-- 'make' makes the library libclientserver.a and recursively builds the
-  example programs in 'test'.
-- The subdirectory 'test' contains the test programs myclient and myserver,
-  as defined in the project description, section 5.3.
-- 'make' makes the executables myclient and myserver.
+##Installation
+Navigate to the /src/ directory and execute the following:
+```
+make all
+make install
+```
+
+To run the program, navigate to the /bin/ directory
+```
+cd ../bin
+```
+To run the server with a persistent database use the command
+```
+./newsserver PORT
+```
+
+To run the server using only main memory use the command
+```
+./newsserverMem PORT
+```
+where PORT is the number of the port you wish to use.
+
+To run the client, use the command:
+```
+./newsclient HOSTNAME PORT
+```
+where HOSTNAME is the IP-address where the server is hosted (localhost if it's the same computer) and PORT is the number of the port you wish to use.
+
+EXAMPLE:
+```
+make all
+make install
+cd ../bin
+./newsserver 3000
+./newsclient localhost 3000
+```

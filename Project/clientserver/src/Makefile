@@ -53,6 +53,9 @@ distclean: clean
 runserver: newsserver newsclient
 	./newsserver 3000
 
+runserverDB: newsserverMem newsclient
+	./newsserverMem 3000
+
 runclient: newsserver newsclient
 	./newsclient localhost 3000
 
