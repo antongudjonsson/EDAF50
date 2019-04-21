@@ -16,7 +16,7 @@ Database::Database(){
     if(system("test -d database.db")){
         system("mkdir database.db");
         system("touch database.db/ngList.txt");
-    }else if(!system("test -d database.db/ngList.txt")){
+    }else if(system("test -d database.db/ngList.txt")){
         ifstream inFile("database.db/ngList.txt");
         string ngid;
         string artid;
